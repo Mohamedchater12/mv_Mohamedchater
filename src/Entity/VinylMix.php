@@ -3,10 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VinylMixRepository;
-use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use SNMP;
 
 #[ORM\Entity(repositoryClass: VinylMixRepository::class)]
 class VinylMix
@@ -29,13 +27,15 @@ class VinylMix
     private ?string $genre = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
     private int $votes = 0;
-    public function __construct(){
-       $this->createdAt = new  DateTimeImmutable();
-}
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -112,10 +112,10 @@ class VinylMix
 
         return $this;
     }
-    public function getVotesString(): String
+    public function getVotesString(): string
     {
-        $prefix = ( $this->votes>=0)?'+':'-';
-        return sprintf("%s %d",$prefix,abs($this->votes));
+        $prefix = ($this->votes === 0) ? '' : (($this->votes >= 0) ? '+' : '-');
+        return sprintf('%s %d', $prefix, abs($this->votes));
     }
     public function getImageUrl(int $width): string
     {
@@ -124,5 +124,11 @@ class VinylMix
             ($this->getId() + 50) % 1000, // number between 0 and 1000, based on the id
             $width
         );
+    }
+    public function upvotes():void{
+        $this->votes++;
+    }
+    public function downvote():void{
+        $this->votes--;
     }
 }
