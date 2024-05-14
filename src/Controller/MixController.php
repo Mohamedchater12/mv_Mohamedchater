@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\VinylMix;
 use App\Repository\VinylMixRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,7 +29,7 @@ class MixController extends AbstractController
             $mix->getTrackCount()
         ));
     }
-    #[Route('/mix/{slug}', name: 'app_mix_show')]
+    #[Route('/mix/{Slug}/vote', name: 'app_mix_vote', methods: ['POST'])]
     public function vote(VinylMix $mix, Request $request, EntityManagerInterface $entityManager): Response
     {
         $direction = $request->request->get('direction', 'up');
@@ -42,7 +41,8 @@ class MixController extends AbstractController
         $entityManager->flush();
         $this->addFlash('success', 'Vote counted!');
         return $this->redirectToRoute('app_mix_show', [
-            'slug' => $mix->getSlug(),
+            'Slug' => $mix->getSlug(),
         ]);
     }
-}
+    }
+
