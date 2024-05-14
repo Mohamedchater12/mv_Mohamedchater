@@ -30,7 +30,7 @@ class MixController extends AbstractController
             $mix->getTrackCount()
         ));
     }
-    #[Route('/mix/{id}/vote', name: 'app_mix_vote', methods: ['POST'])]
+    #[Route('/mix/{slug}', name: 'app_mix_show')]
     public function vote(VinylMix $mix, Request $request, EntityManagerInterface $entityManager): Response
     {
         $direction = $request->request->get('direction', 'up');
@@ -42,7 +42,7 @@ class MixController extends AbstractController
         $entityManager->flush();
         $this->addFlash('success', 'Vote counted!');
         return $this->redirectToRoute('app_mix_show', [
-            'id' => $mix->getId(),
+            'slug' => $mix->getSlug(),
         ]);
     }
 }
